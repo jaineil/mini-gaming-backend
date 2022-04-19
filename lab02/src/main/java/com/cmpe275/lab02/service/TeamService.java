@@ -6,6 +6,8 @@ import com.cmpe275.lab02.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class TeamService {
     @Autowired
@@ -30,7 +32,9 @@ public class TeamService {
         return existingTeam;
     }
 
-    public void delete(long teamId){
-        teamRepository.deleteTeamById(teamId);
+    @Transactional
+    public void delete(long teamId) {
+
+        teamRepository.removeTeamById(teamId);
     }
 }

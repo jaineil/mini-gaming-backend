@@ -12,4 +12,5 @@ import java.util.List;
 public interface PlayerRepository extends CrudRepository<Player, Long>{
     Player getPlayerById(long id);
     void removePlayerById(long id);
+
 }

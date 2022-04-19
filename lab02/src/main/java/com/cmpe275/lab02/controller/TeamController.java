@@ -2,6 +2,7 @@ package com.cmpe275.lab02.controller;
 
 import com.cmpe275.lab02.model.Address;
 import com.cmpe275.lab02.model.Team;
+import com.cmpe275.lab02.service.PlayerService;
 import com.cmpe275.lab02.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,9 @@ public class TeamController {
 
         @Autowired
         private TeamService teamService;
+
+        @Autowired
+        private PlayerService playerService;
 
         // build create player REST API
         @PostMapping()
@@ -78,6 +82,7 @@ public class TeamController {
                 @PathVariable long teamId
         ){
             try{
+                playerService.updatePlayersOfTeam(teamId);
                 teamService.delete(teamId);
             } catch(Exception e){
                 System.err.println(e);

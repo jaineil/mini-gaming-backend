@@ -18,4 +18,20 @@ public class OpponentId implements Serializable {
         this.playerId = playerId;
         this.opponentId = opponentId;
     }
+
+    public long getOpponentId() {
+        return opponentId;
+    }
+
+    public void setOpponentId(long opponentId) {
+        this.opponentId = opponentId;
+    }
+
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
 }

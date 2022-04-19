@@ -100,4 +100,18 @@ public class PlayerController {
 
         return new ResponseEntity<Player>(playerService.update(playerId, player), HttpStatus.OK);
     }
+
+    //delete by ID
+    @DeleteMapping("/{playerId}")
+    public  ResponseEntity<String> deletePlayer(
+            @PathVariable long playerId
+    ){
+        try{
+            playerService.delete(playerId);
+        } catch(Exception e){
+            System.err.println(e);
+        }
+
+        return new ResponseEntity<String>("Deleted player with ID: "+playerId+" successfully", HttpStatus.OK);
+    }
 }

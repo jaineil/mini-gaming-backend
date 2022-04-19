@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeamRepository extends CrudRepository<Team, Long> {
     public Team getTeamById(long id);
+
+    public void deleteTeamById(long id);
 }

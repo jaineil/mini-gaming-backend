@@ -48,7 +48,7 @@ public class Player {
     private Team team;
 
     @ManyToMany
-    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name="OPPONENT",
             joinColumns=@JoinColumn(name="playerId"),
             inverseJoinColumns=@JoinColumn(name="opponentId")

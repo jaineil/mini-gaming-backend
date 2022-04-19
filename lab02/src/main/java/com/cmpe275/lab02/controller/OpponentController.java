@@ -31,15 +31,18 @@ public class OpponentController {
         return new ResponseEntity<String>("Recorded opponent", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{op}/{reverseOp}")
+    @DeleteMapping("/{playerId}/{opponentId}")
     public ResponseEntity<String> removeOpponent(
-            @PathVariable long op,
-            @PathVariable long reverseOp
+            @PathVariable long playerId,
+            @PathVariable long opponentId
+
     ) {
-        OpponentId opponent = new OpponentId(op, reverseOp);
+        OpponentId opponent = new OpponentId(playerId, opponentId);
         opponentService.removeOpponent(opponent);
-        OpponentId reverseOpponent = new OpponentId(reverseOp, op);
+
+        OpponentId reverseOpponent = new OpponentId(opponentId, playerId);
         opponentService.removeOpponent(reverseOpponent);
-        return new ResponseEntity<String>("Removed opponent", HttpStatus.OK);
+
+        return new ResponseEntity<String>("Removed opponent successfully", HttpStatus.OK);
     }
 }

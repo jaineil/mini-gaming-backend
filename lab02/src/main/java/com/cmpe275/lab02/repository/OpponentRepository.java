@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OpponentRepository extends CrudRepository<Opponent, OpponentId> {
-//    Opponent getOpponentByCompositeOpponentId(long compositeOpponentId);
     Opponent getOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
-     void removeOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
+    void removeOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
 }

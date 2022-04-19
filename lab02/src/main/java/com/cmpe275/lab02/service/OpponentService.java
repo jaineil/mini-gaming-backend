@@ -6,6 +6,8 @@ import com.cmpe275.lab02.repository.OpponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class OpponentService {
     @Autowired
@@ -15,5 +17,17 @@ public class OpponentService {
         Opponent firstInsert = opponentRepository.save(opponent);
         Opponent secondInsert = opponentRepository.save(reverseOpponent);
         return;
+    }
+
+    @Transactional
+    public void removeOpponent(OpponentId compositeOpponentId) {
+        try {
+            Opponent opponent = opponentRepository.getOpponentByCompositeOpponentId(compositeOpponentId);
+            opponent.getCompositeOpponentId().getPlayerId();
+            opponent.getCompositeOpponentId().getOpponentId();
+            opponentRepository.removeOpponentByCompositeOpponentId(compositeOpponentId);
+        } catch (Exception e) {
+            System.out.println("These two players are not opponents of each other");
+        }
     }
 }

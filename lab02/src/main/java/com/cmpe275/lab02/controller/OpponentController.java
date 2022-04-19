@@ -6,10 +6,7 @@ import com.cmpe275.lab02.service.OpponentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("opponents")
@@ -32,5 +29,17 @@ public class OpponentController {
         }
 
         return new ResponseEntity<String>("Recorded opponent", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{op}/{reverseOp}")
+    public ResponseEntity<String> removeOpponent(
+            @PathVariable long op,
+            @PathVariable long reverseOp
+    ) {
+        OpponentId opponent = new OpponentId(op, reverseOp);
+        opponentService.removeOpponent(opponent);
+        OpponentId reverseOpponent = new OpponentId(reverseOp, op);
+        opponentService.removeOpponent(reverseOpponent);
+        return new ResponseEntity<String>("Removed opponent", HttpStatus.OK);
     }
 }

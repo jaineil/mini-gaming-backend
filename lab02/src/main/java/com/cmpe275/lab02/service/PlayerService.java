@@ -27,9 +27,7 @@ public class PlayerService {
         existingPlayer.setFirstName(player.getFirstName());
         existingPlayer.setLastName(player.getLastName());
         existingPlayer.setEmail(player.getEmail());
-        // add address fields here
-        System.out.println("Printing Team: ");
-        System.out.println(existingPlayer.getTeam());
+        existingPlayer.setAddress(player.getAddress());
         playerRepository.save(existingPlayer);
         return existingPlayer;
     }

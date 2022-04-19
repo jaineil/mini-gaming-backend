@@ -46,5 +46,30 @@ public class TeamController {
         public ResponseEntity<Team> getTeam(@PathVariable long teamId) {
             return new ResponseEntity<Team>(teamService.fetch(teamId), HttpStatus.OK);
         }
+
+        @PutMapping("/{teamId}")
+        public ResponseEntity<Team> updateTeam(
+                @PathVariable("teamId") long teamId,
+                @RequestParam String name,
+                @RequestParam String description,
+                @RequestParam (required = false) String street,
+                @RequestParam (required = false) String city,
+                @RequestParam (required = false) String state,
+                @RequestParam (required = false) String zip
+        ) {
+            Team team = Team.builder()
+                    .name(name)
+                    .description(description)
+                    .address(
+                            Address.builder()
+                                    .street(street)
+                                    .city(city)
+                                    .state(state)
+                                    .zip(zip)
+                                    .build()
+                    )
+                    .build();
+            return new ResponseEntity<Team>(teamService.update(teamId, team), HttpStatus.OK);
+        }
     }
 

@@ -21,7 +21,6 @@ public class TeamService {
         return teamRepository.getTeamById(teamId);
     }
 
-    // update team API
     public Team update(long teamId, Team team) {
         Team existingTeam = teamRepository.getTeamById(teamId);
         existingTeam.setName(team.getName());
@@ -29,5 +28,9 @@ public class TeamService {
         existingTeam.setAddress(team.getAddress());
         teamRepository.save(existingTeam);
         return existingTeam;
+    }
+
+    public void delete(long teamId){
+        teamRepository.deleteTeamById(teamId);
     }
 }

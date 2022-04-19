@@ -71,5 +71,19 @@ public class TeamController {
                     .build();
             return new ResponseEntity<Team>(teamService.update(teamId, team), HttpStatus.OK);
         }
+
+        //delete by id
+        @DeleteMapping("/{teamId}")
+        public  ResponseEntity<String> deleteTeam(
+                @PathVariable long teamId
+        ){
+            try{
+                teamService.delete(teamId);
+            } catch(Exception e){
+                System.err.println(e);
+            }
+
+            return new ResponseEntity<String>("Deleted team with ID: "+teamId+" successfully", HttpStatus.OK);
+        }
     }
 

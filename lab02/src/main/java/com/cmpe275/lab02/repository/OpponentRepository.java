@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OpponentRepository extends CrudRepository<Opponent, OpponentId> {
-//    Opponent getOpponentByCompositeOpponentId(long compositeOpponentId);
     Opponent getOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
-     void removeOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
 
-     @Modifying
-     @Query(value = "DELETE FROM opponent WHERE player_id = ?1 OR opponent_id = ?1",
-     nativeQuery = true)
-     void removeAllOpponentsForPlayer(long playerId);
+    void removeOpponentByCompositeOpponentId(OpponentId compositeOpponentId);
+
+    @Modifying
+    @Query(value = "DELETE FROM opponent WHERE player_id = ?1 OR opponent_id = ?1", nativeQuery = true)
+    void removeAllOpponentsForPlayer(long playerId);
+
 }

@@ -15,4 +15,12 @@ import java.io.Serializable;
 public class Opponent implements Serializable {
     @EmbeddedId
     private OpponentId compositeOpponentId;
+
+    public OpponentId getCompositeOpponentId() {
+        return compositeOpponentId;
+    }
+
+    public void setCompositeOpponentId(OpponentId compositeOpponentId) {
+        this.compositeOpponentId = compositeOpponentId;
+    }
 }

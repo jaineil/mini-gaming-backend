@@ -5,6 +5,8 @@ import com.cmpe275.lab02.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 // this annotation handles a singleton bean creation of the following class, enabling DI
 @Service
 public class PlayerService {
@@ -21,7 +23,6 @@ public class PlayerService {
         return playerRepository.getPlayerById(playerId);
     }
 
-    // update player API
     public Player update(long playerId, Player player) {
         Player existingPlayer = playerRepository.getPlayerById(playerId);
         existingPlayer.setFirstName(player.getFirstName());
@@ -31,4 +32,19 @@ public class PlayerService {
         playerRepository.save(existingPlayer);
         return existingPlayer;
     }
+
+    @Transactional
+    public void delete(long playerId){
+//        Player existingPlayer = playerRepository.getPlayerById(playerId);
+//        // delete player first dissolves the inverse relationship
+//        for (Player opponent: existingPlayer.getOpponents())
+//        {
+//            opponent.getOpponents().remove(existingPlayer);
+//            playerRepository.save(opponent);
+//        }
+//        // then cascade deletes the straight relationship
+
+        playerRepository.removePlayerById(playerId);
+    }
+
 }

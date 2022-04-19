@@ -61,10 +61,23 @@ public class OpponentController {
             @PathVariable long opponentId
 
     ) {
-        OpponentId opponent = new OpponentId(playerId, opponentId);
-        opponentService.removeOpponent(opponent);
+        try {
+            Player playerInfo = playerService.fetch(playerId);
+            playerInfo.getId();
+            Player opponentInfo = playerService.fetch(opponentId);
+            opponentInfo.getId();
+        } catch(Exception e) {
+            return new ResponseEntity<String>("One or more players don't exist", HttpStatus.NOT_FOUND);
+        }
 
+        OpponentId opponent = new OpponentId(playerId, opponentId);
         OpponentId reverseOpponent = new OpponentId(opponentId, playerId);
+
+        if ((!opponentService.checkIfExists(opponent)) || (!opponentService.checkIfExists(reverseOpponent))) {
+            return new ResponseEntity<String>("These two players are not opponents of each other", HttpStatus.BAD_REQUEST);
+        }
+
+        opponentService.removeOpponent(opponent);
         opponentService.removeOpponent(reverseOpponent);
 
         return new ResponseEntity<String>("Removed opponent successfully", HttpStatus.OK);

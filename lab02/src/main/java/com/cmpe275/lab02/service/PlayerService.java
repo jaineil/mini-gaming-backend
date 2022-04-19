@@ -1,6 +1,7 @@
 package com.cmpe275.lab02.service;
 
 import com.cmpe275.lab02.model.Player;
+import com.cmpe275.lab02.repository.OpponentRepository;
 import com.cmpe275.lab02.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,8 @@ public class PlayerService {
 //            playerRepository.save(opponent);
 //        }
 //        // then cascade deletes the straight relationship
-
         playerRepository.removePlayerById(playerId);
+
     }
 
     @Transactional

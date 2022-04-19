@@ -47,4 +47,9 @@ public class PlayerService {
         playerRepository.removePlayerById(playerId);
     }
 
+    @Transactional
+    public void updatePlayersOfTeam(long teamId) {
+        playerRepository.updateAllPlayersOfTeam(teamId);
+    }
+
 }

@@ -3,6 +3,8 @@ package com.cmpe275.lab02.service;
 import com.cmpe275.lab02.model.Opponent;
 import com.cmpe275.lab02.model.OpponentId;
 import com.cmpe275.lab02.repository.OpponentRepository;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,10 @@ public class OpponentService {
         } catch (Exception e) {
             System.out.println("These two players are not opponents of each other");
         }
+    }
+
+    @Transactional
+    public void removeAllOpponents(long playerId) {
+        opponentRepository.removeAllOpponentsForPlayer(playerId);
     }
 }

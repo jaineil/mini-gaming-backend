@@ -42,4 +42,12 @@ public class OpponentController {
         opponentService.removeOpponent(reverseOpponent);
         return new ResponseEntity<String>("Removed opponent", HttpStatus.OK);
     }
+
+    @DeleteMapping("/test/{playerId}")
+    public ResponseEntity<String> removeAllOpponentsForPlayer(
+            @PathVariable long playerId
+    ) {
+        opponentService.removeAllOpponents(playerId);
+        return new ResponseEntity<String>("Removed all opponent", HttpStatus.OK);
+    }
 }

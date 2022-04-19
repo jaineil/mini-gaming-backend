@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.cmpe275.lab02.service.TeamService;
 
 import javax.xml.ws.Response;
 
@@ -19,6 +20,8 @@ import javax.xml.ws.Response;
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private TeamService teamService;
 
     // build create player REST API
     @PostMapping()
@@ -52,7 +55,10 @@ public class PlayerController {
                 .build();
 
         long playerId = playerService.insert(player);
-        return new ResponseEntity<Player>(playerService.fetch(playerId), HttpStatus.CREATED);
+        Player newPlayer = playerService.fetch(playerId);
+        Team newPlayerTeam = teamService.fetch(teamId);
+        newPlayer.setTeam(newPlayerTeam);
+        return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
     }
 
     // get player by ID

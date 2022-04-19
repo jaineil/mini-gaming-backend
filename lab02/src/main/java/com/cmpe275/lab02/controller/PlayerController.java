@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
+
 // /player/apis/post/insert/{...}
 // /team/apis/update/{...}
 
@@ -53,11 +55,43 @@ public class PlayerController {
         return new ResponseEntity<Player>(playerService.fetch(playerId), HttpStatus.CREATED);
     }
 
+    // get player by ID
     @GetMapping("/{playerId}")
     @ResponseBody
     public ResponseEntity<Player> getPlayer(
             @PathVariable long playerId
     ) {
         return new ResponseEntity<Player>(playerService.fetch(playerId), HttpStatus.OK);
+    }
+
+    // update player info
+    @PutMapping("/{playerId}")
+    public ResponseEntity<Player> updatePlayer(
+            @PathVariable("playerId") long playerId,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam (required = false) String street,
+            @RequestParam (required = false) String city,
+            @RequestParam (required = false) String state,
+            @RequestParam (required = false) String zip,
+            @RequestParam (required = false) long teamId
+    ) {
+        Player player = Player.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .address(
+                        Address.builder()
+                                .street(street)
+                                .city(city)
+                                .state(state)
+                                .zip(zip)
+                                .build()
+                )
+                .team(Team.builder().id(teamId).build())
+                .build();
+
+        return new ResponseEntity<Player>(playerService.update(playerId, player), HttpStatus.OK);
     }
 }

@@ -20,4 +20,17 @@ public class PlayerService {
     public Player fetch(long playerId) {
         return playerRepository.getPlayerById(playerId);
     }
+
+    // update player API
+    public Player update(long playerId, Player player) {
+        Player existingPlayer = playerRepository.getPlayerById(playerId);
+        existingPlayer.setFirstName(player.getFirstName());
+        existingPlayer.setLastName(player.getLastName());
+        existingPlayer.setEmail(player.getEmail());
+        // add address fields here
+        System.out.println("Printing Team: ");
+        System.out.println(existingPlayer.getTeam());
+        playerRepository.save(existingPlayer);
+        return existingPlayer;
+    }
 }

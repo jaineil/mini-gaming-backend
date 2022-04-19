@@ -21,6 +21,16 @@ public class OpponentService {
         return;
     }
 
+    public Boolean checkIfExists(OpponentId compositeOpponentId) {
+        try {
+            Opponent opponent = opponentRepository.getOpponentByCompositeOpponentId(compositeOpponentId);
+            opponent.getCompositeOpponentId();
+            return true;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
     @Transactional
     public void removeOpponent(OpponentId compositeOpponentId) {
         try {

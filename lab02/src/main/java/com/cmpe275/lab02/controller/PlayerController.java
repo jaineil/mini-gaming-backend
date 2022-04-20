@@ -11,11 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.cmpe275.lab02.service.TeamService;
 
-import javax.xml.ws.Response;
-
-// /player/apis/post/insert/{...}
-// /team/apis/update/{...}
-
 @RestController
 @RequestMapping("player") //
 public class PlayerController {
@@ -26,26 +21,59 @@ public class PlayerController {
     @Autowired
     private OpponentService opponentService;
 
-    // build create player REST API
+    // create player
     @PostMapping()
-    public ResponseEntity<Player> savePlayer(
+    public ResponseEntity<?> savePlayer(
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,
+            @RequestParam (required = false) String description,
             @RequestParam (required = false) String street,
             @RequestParam (required = false) String city,
             @RequestParam (required = false) String state,
             @RequestParam (required = false) String zip,
-            @RequestParam (required = false) long teamId
+            @RequestParam (required = false) Long teamId
     ) {
 
-        // Player player = new Player(....); -> (params.name, params.age..)
-        // public Player (args1, args2..) {} ;
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
+            return new ResponseEntity<>("Compulsory parameters missing", HttpStatus.BAD_REQUEST);
+        }
+
+        if (playerService.isEmailExists(email)) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        if (teamId == null) {
+            Player player = Player.builder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .email(email)
+                    .description(description)
+                    .address(
+                            Address.builder()
+                                    .street(street)
+                                    .city(city)
+                                    .state(state)
+                                    .zip(zip)
+                                    .build()
+                    )
+                    .build();
+
+            long playerId = playerService.insert(player);
+            Player newPlayer = playerService.fetch(playerId);
+            return new ResponseEntity<Player>(newPlayer, HttpStatus.OK);
+
+        } else {
+            if (!teamService.isTeam(teamId)) {
+                return new ResponseEntity<>("No team with given team id exists", HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Player player = Player.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
+                .description(description)
                 .address(
                         Address.builder()
                                 .street(street)
@@ -57,39 +85,77 @@ public class PlayerController {
                 .team(Team.builder().id(teamId).build())
                 .build();
 
+
         long playerId = playerService.insert(player);
         Player newPlayer = playerService.fetch(playerId);
         Team newPlayerTeam = teamService.fetch(teamId);
         newPlayer.setTeam(newPlayerTeam);
-        return new ResponseEntity<Player>(newPlayer, HttpStatus.CREATED);
+        return new ResponseEntity<Player>(newPlayer, HttpStatus.OK);
     }
 
     // get player by ID
     @GetMapping("/{playerId}")
     @ResponseBody
-    public ResponseEntity<Player> getPlayer(
+    public ResponseEntity<?> getPlayer(
             @PathVariable long playerId
     ) {
+        if (!playerService.isPlayer(playerId)) {
+            return new ResponseEntity<>("No player with given player id exists", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<Player>(playerService.fetch(playerId), HttpStatus.OK);
     }
 
     // update player info
     @PutMapping("/{playerId}")
-    public ResponseEntity<Player> updatePlayer(
+    public ResponseEntity<?> updatePlayer(
             @PathVariable("playerId") long playerId,
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,
+            @RequestParam (required = false) String description,
             @RequestParam (required = false) String street,
             @RequestParam (required = false) String city,
             @RequestParam (required = false) String state,
             @RequestParam (required = false) String zip,
-            @RequestParam (required = false) long teamId
+            @RequestParam (required = false) Long teamId
     ) {
+
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
+            return new ResponseEntity<>("Compulsory parameters missing", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!playerService.isPlayer(playerId)) {
+            return new ResponseEntity<>("No player with given player id exists", HttpStatus.NOT_FOUND);
+        }
+
+        if (!teamService.isTeam(teamId)) {
+            return new ResponseEntity<>("No team with given team id exists", HttpStatus.BAD_REQUEST);
+        }
+
+        if (teamId == null) {
+            Player player = Player.builder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .email(email)
+                    .description(description)
+                    .address(
+                            Address.builder()
+                                    .street(street)
+                                    .city(city)
+                                    .state(state)
+                                    .zip(zip)
+                                    .build()
+                    )
+                    .build();
+
+            return new ResponseEntity<Player>(playerService.update(playerId, player), HttpStatus.OK);
+        }
+
         Player player = Player.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
+                .description(description)
                 .address(
                         Address.builder()
                                 .street(street)
@@ -108,27 +174,13 @@ public class PlayerController {
     @DeleteMapping("/{playerId}")
     public  ResponseEntity<String> deletePlayer(
             @PathVariable long playerId
-    ){
-        try{
-            opponentService.removeAllOpponents(playerId);
-            playerService.delete(playerId);
-        } catch(Exception e){
-            System.err.println(e);
+    ) {
+        if (!playerService.isPlayer(playerId)) {
+            return new ResponseEntity<>("No player with given player id exists", HttpStatus.NOT_FOUND);
         }
 
+        opponentService.removeAllOpponents(playerId);
+        playerService.delete(playerId);
         return new ResponseEntity<String>("Deleted player with ID: "+playerId+" successfully", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/test/{teamId}")
-    public  ResponseEntity<String> updatePlayersOfTeam(
-            @PathVariable long teamId
-    ){
-        try{
-            playerService.updatePlayersOfTeam(teamId);
-        } catch(Exception e){
-            System.err.println(e);
-        }
-
-        return new ResponseEntity<String>("Set team=null for all players of team with ID: "+teamId+" successfully", HttpStatus.OK);
     }
 }

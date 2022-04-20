@@ -1,7 +1,6 @@
 package com.cmpe275.lab02.service;
 
 import com.cmpe275.lab02.model.Player;
-import com.cmpe275.lab02.repository.OpponentRepository;
 import com.cmpe275.lab02.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,20 @@ import javax.transaction.Transactional;
 public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
+
+    public boolean isEmailExists(String email) {
+        if (playerRepository.existsByEmail(email)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPlayer(long playerId) {
+        if (playerRepository.existsById(playerId)) {
+            return true;
+        }
+        return false;
+    }
 
     public long insert(Player player) {
         long id = playerRepository.save(player).getId();

@@ -47,6 +47,7 @@ public class PlayerService {
         existingPlayer.setLastName(player.getLastName());
         existingPlayer.setEmail(player.getEmail());
         existingPlayer.setAddress(player.getAddress());
+        existingPlayer.setTeam(player.getTeam());
         playerRepository.save(existingPlayer);
         return existingPlayer;
     }

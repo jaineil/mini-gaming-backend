@@ -128,7 +128,7 @@ public class PlayerController {
             return new ResponseEntity<>("No player with given player id exists", HttpStatus.NOT_FOUND);
         }
 
-        if (!teamService.isTeam(teamId)) {
+        if ((teamId != null) && (!teamService.isTeam(teamId))) {
             return new ResponseEntity<>("No team with given team id exists", HttpStatus.BAD_REQUEST);
         }
 
@@ -167,7 +167,10 @@ public class PlayerController {
                 .team(Team.builder().id(teamId).build())
                 .build();
 
-        return new ResponseEntity<Player>(playerService.update(playerId, player), HttpStatus.OK);
+        Player updatedPlayer = playerService.update(playerId, player);
+        Team updatedPlayerTeam = teamService.fetch(teamId);
+        updatedPlayer.setTeam(updatedPlayerTeam);
+        return new ResponseEntity<Player>(updatedPlayer, HttpStatus.OK);
     }
 
     //delete by ID

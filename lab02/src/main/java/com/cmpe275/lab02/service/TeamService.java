@@ -2,6 +2,7 @@ package com.cmpe275.lab02.service;
 
 import com.cmpe275.lab02.model.Player;
 import com.cmpe275.lab02.model.Team;
+import com.cmpe275.lab02.repository.PlayerRepository;
 import com.cmpe275.lab02.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import javax.transaction.Transactional;
 public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     public Team insert(Team team) {
         long id = teamRepository.save(team).getId();
@@ -34,7 +38,14 @@ public class TeamService {
 
     @Transactional
     public void delete(long teamId) {
-
+        playerRepository.updateAllPlayersOfTeam(teamId);
         teamRepository.removeTeamById(teamId);
+    }
+
+    public boolean isTeam(long teamId) {
+        if (teamRepository.existsById(teamId)) {
+            return true;
+        }
+        return false;
     }
 }

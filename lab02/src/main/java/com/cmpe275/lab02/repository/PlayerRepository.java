@@ -1,7 +1,5 @@
 package com.cmpe275.lab02.repository;
 
-import com.cmpe275.lab02.model.Opponent;
-import com.cmpe275.lab02.model.OpponentId;
 import com.cmpe275.lab02.model.Player;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +17,7 @@ public interface PlayerRepository extends CrudRepository<Player, Long> {
     @Modifying
     @Query(value = "UPDATE player SET team_id = NULL WHERE team_id = ?1", nativeQuery = true)
     void updateAllPlayersOfTeam(long teamId);
+
+    boolean existsByEmail(String email);
+    boolean existsById(long playerId);
 }

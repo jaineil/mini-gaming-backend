@@ -14,6 +14,23 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private OpponentRepository opponentRepository;
+
+    public boolean isEmailExists(String email) {
+        if (playerRepository.existsByEmail(email)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPlayer(long playerId) {
+        if (playerRepository.existsById(playerId)) {
+            return true;
+        }
+        return false;
+    }
+
     public long insert(Player player) {
         long id = playerRepository.save(player).getId();
         System.out.println("The insert ID of player is -> " + id);
@@ -44,8 +61,8 @@ public class PlayerService {
 //            playerRepository.save(opponent);
 //        }
 //        // then cascade deletes the straight relationship
+        opponentRepository.removeAllOpponentsForPlayer(playerId);
         playerRepository.removePlayerById(playerId);
-
     }
 
     @Transactional

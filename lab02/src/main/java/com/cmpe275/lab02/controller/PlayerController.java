@@ -172,15 +172,14 @@ public class PlayerController {
 
     //delete by ID
     @DeleteMapping("/{playerId}")
-    public  ResponseEntity<String> deletePlayer(
+    public  ResponseEntity<?> deletePlayer(
             @PathVariable long playerId
     ) {
         if (!playerService.isPlayer(playerId)) {
             return new ResponseEntity<>("No player with given player id exists", HttpStatus.NOT_FOUND);
         }
-
-        opponentService.removeAllOpponents(playerId);
+        Player deletedPlayer = playerService.fetch(playerId);
         playerService.delete(playerId);
-        return new ResponseEntity<String>("Deleted player with ID: "+playerId+" successfully", HttpStatus.OK);
+        return new ResponseEntity<Player>(deletedPlayer, HttpStatus.OK);
     }
 }

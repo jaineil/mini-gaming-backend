@@ -1,6 +1,7 @@
 package com.cmpe275.lab02.service;
 
 import com.cmpe275.lab02.model.Player;
+import com.cmpe275.lab02.repository.OpponentRepository;
 import com.cmpe275.lab02.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import javax.transaction.Transactional;
 public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private OpponentRepository opponentRepository;
 
     public boolean isEmailExists(String email) {
         if (playerRepository.existsByEmail(email)) {
@@ -57,8 +61,8 @@ public class PlayerService {
 //            playerRepository.save(opponent);
 //        }
 //        // then cascade deletes the straight relationship
+        opponentRepository.removeAllOpponentsForPlayer(playerId);
         playerRepository.removePlayerById(playerId);
-
     }
 
     @Transactional

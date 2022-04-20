@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("team")
 public class TeamController {
@@ -113,15 +115,21 @@ public class TeamController {
 
         //delete by id
         @DeleteMapping("/{teamId}")
-        public  ResponseEntity<String> deleteTeam(
+        public  ResponseEntity<?> deleteTeam(
                 @PathVariable long teamId
         ){
-            try {
-                teamService.delete(teamId);
-            } catch(Exception e){
-                System.err.println(e);
+            if (!teamService.isTeam(teamId)) {
+                return new ResponseEntity<>("No team with given team id exists", HttpStatus.NOT_FOUND);
             }
 
+            try {
+                Team deletedTeam=teamService.fetch(teamId);
+                teamService.delete(teamId);
+                return new ResponseEntity<>(deletedTeam,HttpStatus.OK);
+            } catch(Exception e){
+                System.err.println(e);
+                return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+            }
         }
     }
 

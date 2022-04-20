@@ -38,7 +38,7 @@ public class Team {
     private Address address;
 
     // TODO: figure out all relationship mappings annotation
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch=FetchType.EAGER)
     @JsonIgnoreProperties({"address", "team", "opponents"})
     private List<Player> players;
 }

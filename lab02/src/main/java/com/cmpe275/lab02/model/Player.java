@@ -47,7 +47,7 @@ public class Player {
     @JsonIgnoreProperties({"players", "address"})
     private Team team;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name="OPPONENT",
             joinColumns=@JoinColumn(name="playerId"),

@@ -16,5 +16,4 @@ public interface OpponentRepository extends CrudRepository<Opponent, OpponentId>
     @Modifying
     @Query(value = "DELETE FROM opponent WHERE player_id = ?1 OR opponent_id = ?1", nativeQuery = true)
     void removeAllOpponentsForPlayer(long playerId);
-
 }

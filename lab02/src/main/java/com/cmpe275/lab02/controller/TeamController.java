@@ -81,8 +81,7 @@ public class TeamController {
         public  ResponseEntity<String> deleteTeam(
                 @PathVariable long teamId
         ){
-            try{
-                playerService.updatePlayersOfTeam(teamId);
+            try {
                 teamService.delete(teamId);
             } catch(Exception e){
                 System.err.println(e);
